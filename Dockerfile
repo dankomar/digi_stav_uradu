@@ -1,19 +1,18 @@
-FROM ubuntu:latest
+FROM postgres:latest
 
-ARG TIME_ZONE=8
+# Set the desired time zone (replace with your preferred time zone)
+ENV TZ=Europe/Paris
 
-RUN apt-get update && apt-get install -y tzdata postgresql
+# Update the system and install necessary packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    tzdata
 
-# Set the timezone
-ENV TZ=Europe
-
+# Set the time zone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y wget lsb-release gnupg
+# Expose the default PostgreSQL port
+EXPOSE 5432
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN apt-get update
-RUN apt-get -y install postgresql
-
+# Start the PostgreSQL service
 CMD ["postgres"]
