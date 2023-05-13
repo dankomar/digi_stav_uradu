@@ -1,4 +1,14 @@
 FROM ubuntu:latest
+ARG TIME_ZONE=8
+
+RUN apt-get update && apt-get install -y tzdata
+
+# Set the timezone
+ENV TZ=Europe
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+CMD ["date"]
 
 RUN apt-get update && apt-get install -y wget lsb-release gnupg
 
