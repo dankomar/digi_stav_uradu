@@ -1,15 +1,10 @@
-# Use a PostgreSQL base image
-FROM postgres:latest
+FROM ubuntu:latest
 
-# Set environment variables
-ENV POSTGIS_MAJOR 3
-ENV POSTGIS_VERSION 3.1
+RUN apt-get update && apt-get install -y wget lsb-release gnupg
 
-# Install PostGIS extension
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
-    && rm -rf /var/lib/apt/lists/*
+RUN sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RUN apt-get update
+RUN apt-get -y install postgresql
 
-# Set the default command to run when starting the container
 CMD ["postgres"]
