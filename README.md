@@ -1,1 +1,1 @@
-# digi_stav_uradu
+Púštať cez mvn spring-boot:run
